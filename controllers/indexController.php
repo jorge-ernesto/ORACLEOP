@@ -2853,7 +2853,7 @@ class indexController extends Controller
 		$cont = 0;
 		foreach($dato as $dat){
 			
-			if(intval($dat['cantidad'])>=0){
+			if(floatval($dat['cantidad'])>=0){
 
 				
 				$inventorynumber = explode("#",$dat['numserielote']);
