@@ -70,7 +70,8 @@ class indexModel extends Model
 			WHEN T.custbody125='3' THEN 'PARCIAL 2'
 			WHEN T.custbody125='4' THEN 'PARCIAL 3'
 			WHEN T.custbody125='5' THEN 'ADICIONAL'
-		END) as tipoTraslado
+		END) as tipoTraslado,
+		T.custbody138 as tipoOT
 		FROM TRANSACTION T
 		LEFT JOIN customrecord_ns_pe_operation_type OPT ON OPT.id=T.custbody_ns_pe_oper_type
 		LEFT JOIN (SELECT itemid,description,consumptionunit FROM ITEM) I ON (I.itemid=T.custbody44)
@@ -107,7 +108,8 @@ class indexModel extends Model
 					"NomVerifica"	 	=> utf8_encode($rs->fields[20]),
 					"fecfirmaVerifica"	=> $rs->fields[21],
 					"linea"	 			=> utf8_encode($rs->fields[22]),
-					"tipoTraslado"	 	=> $rs->fields[23]
+					"tipoTraslado"	 	=> $rs->fields[23],
+					"tipoOT"	 		=> $rs->fields[24],
 				];
 				$rs->MoveNext();
 			}
@@ -231,7 +233,8 @@ class indexModel extends Model
 			(case when U.abbreviation='GR' then IA.quantity*1000 else IA.quantity end) as cantidad,
 			(select custcol17 from transactionline where itemsource='STOCK' and (custcol17 is not null) and item=I.ID) as cantGenerada,
 			T1.id as iddeposito,
-			TL.linesequencenumber as secuencia 
+			TL.linesequencenumber as secuencia,
+			(SELECT bomquantity from transactionline where transaction=TXX.custbody42 and item=TL.item ) as cant_generada 
 			FROM TransactionLine TL
 			INNER JOIN Item I ON ( I.ID = TL.Item )
 			INNER JOIN unitsTypeUom U on (U.internalid=I.saleunit)
@@ -239,6 +242,7 @@ class indexModel extends Model
 			INNER JOIN inventoryNumber INU ON (INU.id=IA.inventorynumber)
 			INNER JOIN inventoryStatus IST ON (IST.id=IA.inventorystatus)
 			LEFT JOIN bin B ON (B.id=IA.bin)
+			INNER JOIN (select id,custbody42 from transaction) TXX on (TL.transaction=TXX.id)
 			INNER JOIN (
 				select TLX.transaction as P1 ,TLX.item as P2, IAX.quantity*-1 as P3, BX.binnumber as D1,ISTX.name as D2, IAX.id as id
 				from TransactionLine TLX
@@ -275,9 +279,9 @@ class indexModel extends Model
 						"fechacaducidad"=> date("d/m/Y",strtotime($rs->fields[15])),
 						"cantidad"	 	=> $rs->fields[16],
 						"cantGenerada" 	=> $rs->fields[17],
-						"principActivo" => $rs->fields[18],
-						"iddeposito" 	=> $rs->fields[19],
-						"secuencia" 	=> $rs->fields[20],
+						"iddeposito" 	=> $rs->fields[18],
+						"secuencia" 	=> $rs->fields[19],
+						"cant_generada" => $rs->fields[20]
 					];
 					$rs->MoveNext();
 				}
@@ -441,7 +445,7 @@ class indexModel extends Model
 
 		$sql="select distinct
 			I.ID , 
-			I.fullname as codigo,
+			I.fullname as codarticulo,
 			I.displayname,
 			(CASE 
 			WHEN PT.abbreviation = 'GR' THEN (TL.quantity*1000*-1) 
@@ -470,7 +474,7 @@ class indexModel extends Model
 			while (!$rs->EOF) {
 				$datos[] = [
 					"ID"			=> $rs->fields[0],
-					"codigo"		=> $rs->fields[1],
+					"codarticulo"	=> $rs->fields[1],
 					"articulo"		=> utf8_encode($rs->fields[2]),
 					"cantidad"		=> $rs->fields[3],
 					"und"			=> $rs->fields[4],
@@ -1110,7 +1114,8 @@ class indexModel extends Model
 		EP.firstname,
 		EP.lastname,
 		TL.custcol27,
-		TL.linesequencenumber
+		TL.linesequencenumber,
+		TL.memo as memoajus
 		FROM Transaction T
 		INNER JOIN TransactionLine TL ON ( TL.Transaction = T.ID )
 		INNER JOIN Item I ON ( I.ID = TL.Item )
@@ -1154,6 +1159,7 @@ class indexModel extends Model
 					"lastname"				=> utf8_encode($rs->fields[22]),
 					"fecha_analisis"		=> date("d/m/Y",strtotime($rs->fields[23])),
 					"linesequencenumber"	=> $rs->fields[24],
+					"memoajus"				=> utf8_encode($rs->fields[25])
 				];
 				$rs->MoveNext();
 			}

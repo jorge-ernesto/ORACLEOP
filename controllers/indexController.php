@@ -76,7 +76,7 @@ class indexController extends Controller
 						<p style='font-size:12px;'>Laboratorios Biomont S.A.</p>
 					</td>
 					<td style='text-align:right;'>
-						<p style='font-size:16px;font-weight:bold;'>F-AL.012.02</p>
+						<p style='font-size:16px;font-weight:bold;'>F-AL.012.03</p>
 					</td>
 				</tr>
 				<tr>
@@ -97,37 +97,52 @@ class indexController extends Controller
 			</table>
 		");
 		
+		if($cabecera_TI[0]['feccaducidad']===null or $cabecera_TI[0]['feccaducidad']==="" or $cabecera_TI[0]['feccaducidad']==="01/01/1970"){
+			$fecExp = "<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>F. Expira:</td>
+						<td class='celda' style='font-size:11px;'>-</td>";
+		}else{
+			$fecExp = "<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>F. Expira:</td>
+						<td class='celda' style='font-size:11px;'>".substr($cabecera_TI[0]['feccaducidad'],3,2)."-".substr($cabecera_TI[0]['feccaducidad'],6,4)."</td>";
+			//$fecExp = substr($cabecera_TI[0]['feccaducidad'],3,2)."-".substr($cabecera_TI[0]['feccaducidad'],6,4);
+		}
+		
+		if($cabecera_TI[0]['tipoOT']==="SEDE ATE : ENVASADO Y EMPAQUE"){
+			$principio_activo = "<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>Principio activo:</td>
+								<td class='celda' style='font-size:11px;'>-</td>";
+		}else{
+			$principio_activo = "<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>Principio activo:</td>
+								<td class='celda' style='font-size:11px;'><p style='background-color:#D6DBDF;color:#D6DBDF;'>Hola</p></td>";
+		}
+		
 		$mpdf->WriteHTML("
 			<table class='tabla' width='100%' style='border:#000000 1px solid;'>
 				<tr class='fila'>
-					<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>Código Producto:</td>
-					<td class='celda' style='font-size:11px;'>".$cabecera_TI[0]['codarticulo']."</td>
-					<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>Producto:</td>
-					<td class='celda' style='font-size:11px;'>".$cabecera_TI[0]['nomarticulo']."</td>
+					<td class='celda' style='width:16%;text-align:right;font-size:11px;font-weight:bold;'>Código Producto:</td>
+					<td class='celda' style='width:32%;font-size:11px;'>".$cabecera_TI[0]['codarticulo']."</td>
+					<td class='celda' style='width:20%;text-align:right;font-size:11px;font-weight:bold;'>Producto:</td>
+					<td class='celda' style='width:30%;font-size:11px;'>".$cabecera_TI[0]['nomarticulo']."</td>
 				</tr>
 				<tr class='fila'>
-					<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>OT:</td>
-					<td class='celda' style='font-size:11px;'>".$cabecera_TI[0]['nomoperaciones']."</td>
-					<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>Cantidad a Producir:</td>
-					<td class='celda' style='font-size:11px;'>".$cabecera_TI[0]['canprod']." ".$cabecera_TI[0]['Unidad']."</td>
+					<td class='celda' style='width:16%;text-align:right;font-size:11px;font-weight:bold;'>OT:</td>
+					<td class='celda' style='width:32%;font-size:11px;'>Orden de Trabajo #".explode("#",$cabecera_TI[0]['nomoperaciones'])[1]."</td>
+					<td class='celda' style='width:20%;text-align:right;font-size:11px;font-weight:bold;'>Cantidad a Producir:</td>
+					<td class='celda' style='width:30%;font-size:11px;'>".$cabecera_TI[0]['canprod']." ".$cabecera_TI[0]['Unidad']."</td>
 				</tr>
 				<tr class='fila'>
-					<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>F. registro:</td>
-					<td class='celda' style='font-size:11px;'>".$cabecera_TI[0]['FechaCreacion']."</td>
-					<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>Lote:</td>
-					<td class='celda' style='font-size:11px;'>".$cabecera_TI[0]['Lote']."</td>
+					<td class='celda' style='width:16%;text-align:right;font-size:11px;font-weight:bold;'>F. registro:</td>
+					<td class='celda' style='width:32%;font-size:11px;'>".$cabecera_TI[0]['FechaCreacion']."</td>
+					<td class='celda' style='width:20%;text-align:right;font-size:11px;font-weight:bold;'>Lote:</td>
+					<td class='celda' style='width:30%;font-size:11px;'>".$cabecera_TI[0]['Lote']."</td>
 				</tr>
 				<tr class='fila'>
-					<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>F. Fabricación:</td>
-					<td class='celda' style='font-size:11px;'>".substr($cabecera_TI[0]['fecfabricacion'],3,2)."-".substr($cabecera_TI[0]['fecfabricacion'],6,4)."</td>
-					<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>F. Expira:</td>
-					<td class='celda' style='font-size:11px;'>".substr($cabecera_TI[0]['feccaducidad'],3,2)."-".substr($cabecera_TI[0]['feccaducidad'],6,4)."</td>
+					<td class='celda' style='width:16%;text-align:right;font-size:11px;font-weight:bold;'>F. Fabricación:</td>
+					<td class='celda' style='width:32%;font-size:11px;'>".substr($cabecera_TI[0]['fecfabricacion'],3,2)."-".substr($cabecera_TI[0]['fecfabricacion'],6,4)."</td>
+					".$fecExp."
 				</tr>
 				<tr class='fila'>
-					<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>Línea:</td>
-					<td class='celda' style='font-size:11px;'>".$cabecera_TI[0]['linea']."</td>
-					<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>Principio activo:</td>
-					<td class='celda' style='font-size:11px;'><p style='background-color:#D6DBDF;color:#D6DBDF;'>Hola</p></td>
+					<td class='celda' style='width:16%;text-align:right;font-size:11px;font-weight:bold;'>Línea:</td>
+					<td class='celda' style='width:32%;font-size:11px;'>".$cabecera_TI[0]['linea']."</td>
+					".$principio_activo."
 				</tr>
 			</table>
 		");
@@ -138,7 +153,7 @@ class indexController extends Controller
 			<table class='tabla1' width='100%'>
 				<tr class='fila1'>
 					<td class='celda1' style='width:8%;font-size:10px;text-align:center;'><strong>Código</strong></td>
-					<td class='celda1' style='width:23%;font-size:10px;'><strong>Descripcion</strong></td>
+					<td class='celda1' style='width:22%;font-size:10px;'><strong>Descripcion</strong></td>
 					<td class='celda1' style='width:6%;font-size:10px;'><strong>Deposito</strong></td>
 					<td class='celda1' style='width:7%;font-size:10px;'><strong>Cantidad Generada</strong></td>
 					<td class='celda1' style='width:7%;font-size:10px;text-align:center;'><strong>Cantidad Dispensada</strong></td>
@@ -152,6 +167,15 @@ class indexController extends Controller
 				</tr>
 		");
 		
+		//Inicio Caso raro
+		if($cabecera_TI[0]['idOP']==='1062113'){
+			$input["dato"]['almacen'] ='1';
+		}
+		if($cabecera_TI[0]['idOP']==='1739335'){
+			$input["dato"]['almacen'] ='2';
+		}
+		//Fin Caso raro
+
 		if(intval($input["dato"]['almacen'])==1)
 		{
 			$dato_articulos = $objModel->getArticulos($cabecera_TI[0]['idtransaccion'],$cabecera_TI[0]['idOP']);
@@ -163,6 +187,7 @@ class indexController extends Controller
 			}else{
 				$res_dato_detalle_OP = $dato_articulos;
 			}
+			
 
 			foreach($res_dato_detalle_OP as $art){
 
@@ -213,25 +238,21 @@ class indexController extends Controller
 			date_default_timezone_set('America/Lima');
 			
 			$mpdf->WriteHTML("
-				<table class='tabla2' width='40%'>
+				<table class='tabla2' width='23%'>
 					<tr>
 						<td colspan=2 style='font-size:11px;'><strong>Revisión y descarga OT</strong></td>
 					</tr>
 					<tr>
 						<td class='celda1' style='font-size:9px;text-align:center;'>Descarga / Fecha</td>
-						<td class='celda1' style='font-size:9px;text-align:center;'>Verificado / Fecha</td>
 					</tr>
 					<tr>
 						<td class='celda1' style='font-size:9px;text-align:center;height:60px;border-bottom:0px solid white;'>".ucwords($cabecera_TI[0]['NomDescarga'])."<br>".$cabecera_TI[0]['fecfirmaDescarga']."</td>
-						<td class='celda1' style='font-size:9px;text-align:center;height:60px;border-bottom:0px solid white;'>".ucwords($cabecera_TI[0]['NomVerifica'])."<br>".$cabecera_TI[0]['fecfirmaVerifica']."</td>
 					</tr>
 					<tr>
 						<td style='font-size:7px;text-align:center;border-left:1px solid black;border-right:1px solid black;border-top:0px solid white;'>Firma digital desde NETSUITE</td>
-						<td style='font-size:7px;text-align:center;border-right:1px solid black;border-top:0px solid white;'>Firma digital desde NETSUITE</td>
 					</tr>
 					<tr>
 						<td class='celda1' style='font-size:9px;text-align:center;'>Almacén</td>
-						<td class='celda1' style='font-size:9px;text-align:center;'>Aseguramiento de la Calidad</td>
 					</tr>
 				</table>
 			");
@@ -250,7 +271,7 @@ class indexController extends Controller
 						<td class='celda1' style='font-size:9px;text-align:center;'>Dispensado / Fecha</td>
 						<td style='width:2%;border-top:#FFFFFF;'></td>
 						<td class='celda1' style='font-size:9px;text-align:center;'>Entregado / Fecha</td>
-						<td class='celda1' style='font-size:9px;text-align:center;'>Revisado / Fecha</td>
+						<td class='celda1' style='font-size:9px;text-align:center;'>Recepcionado / Fecha</td>
 					</tr>
 					<tr>
 						<td class='celda1' style='font-size:9px;text-align:center; height:60px;'></td>
@@ -266,7 +287,7 @@ class indexController extends Controller
 						<td class='celda1' style='font-size:9px;text-align:center;'>Almacén</td>
 						<td style='width:2%;'></td>
 						<td class='celda1' style='font-size:9px;text-align:center;'>Almacén</td>
-						<td class='celda1' style='font-size:9px;text-align:center;'>Producción</td>
+						<td class='celda1' style='font-size:9px;text-align:center;'>Producción / ID</td>
 					</tr>
 				</table>
 			");
@@ -287,6 +308,8 @@ class indexController extends Controller
 			");
 
 		}else{
+			//".number_format($art['canttrasladar'], 4, '.', ',')."
+
 			$dato_articulos = $objModel->getArticulos_ID($cabecera_TI[0]['idtransaccion']);
 			
 			foreach($dato_articulos as $art){
@@ -296,9 +319,9 @@ class indexController extends Controller
 				$mpdf->WriteHTML("
 					<tr class='fila1'>
 						<td class='celda1' style='width:8%;font-size:10px;'>".$art['codarticulo']."</td>
-						<td class='celda1' style='width:23%;font-size:10px;'>".$art['nomarticulo']."</td>
+						<td class='celda1' style='width:22%;font-size:10px;'>".$art['nomarticulo']."</td>
 						<td class='celda1' style='width:6%;font-size:10px;text-align:center;'>".$art['desdedeposito']."</td>
-						<td class='celda1' style='width:7%;font-size:10px;text-align:right;'>".number_format($art['canttrasladar'], 4, '.', ',')."</td>
+						<td class='celda1' style='width:7%;font-size:10px;text-align:right;'>".number_format($art['cant_generada'], 4, '.', ',')."</td>
 						<td class='celda1' style='width:7%;font-size:10px;text-align:right;'>".number_format($art['cantidad'], 4, '.', ',')."</td>
 						<td class='celda1' style='width:3%;font-size:10px;text-align:center;'>".$art['unidad']."</td>
 						<td class='celda1' style='width:10%;font-size:10px;text-align:center;'>".$new_dato[0]."</td>
@@ -319,26 +342,38 @@ class indexController extends Controller
 			
 			//date_default_timezone_set('America/Lima');
 			
+			/*if($dato_cabecera_OP[0]['TipOT']!=="ENVASADO Y EMPACADO"){
+				$header = "<td class='celda1' style='font-size:9px;text-align:center;'>Descarga / Fecha</td>
+						<td class='celda1' style='font-size:9px;text-align:center;'>Verificado / Fecha1</td>";
+				$body1 = "<td class='celda1' style='font-size:9px;text-align:center;height:60px;border-bottom:0px solid white;'>".ucwords($cabecera_TI[0]['NomDescarga'])."<br>".$cabecera_TI[0]['fecfirmaDescarga']."</td>
+						<td class='celda1' style='font-size:9px;text-align:center;height:60px;border-bottom:0px solid white;'>".ucwords($cabecera_TI[0]['NomVerifica'])."<br>".$cabecera_TI[0]['fecfirmaVerifica']."</td>";
+				$body2 = "<td style='font-size:7px;text-align:center;border-left:1px solid black;border-right:1px solid black;border-top:0px solid white;'>Firma digital desde NETSUITE</td>
+						<td style='font-size:7px;text-align:center;border-right:1px solid black;border-top:0px solid white;'>Firma digital desde NETSUITE</td>";
+				$footer = "<td class='celda1' style='font-size:9px;text-align:center;'>Almacén</td>
+						<td class='celda1' style='font-size:9px;text-align:center;'>Aseguramiento de la Calidad</td>";
+			}else{
+				$header = "<td class='celda1' style='font-size:9px;text-align:center;'>Descarga / Fecha</td>";
+				$body1 = "<td class='celda1' style='font-size:9px;text-align:center;height:60px;border-bottom:0px solid white;'>".ucwords($cabecera_TI[0]['NomDescarga'])."<br>".$cabecera_TI[0]['fecfirmaDescarga']."</td>";
+				$body2 = "<td style='font-size:7px;text-align:center;border-left:1px solid black;border-right:1px solid black;border-top:0px solid white;'>Firma digital desde NETSUITE</td>";
+				$footer = "<td class='celda1' style='font-size:9px;text-align:center;'>Almacén</td>";
+			}*/
+
 			$mpdf->WriteHTML("
-				<table class='tabla2' width='40%'>
+				<table class='tabla2' width='25%'>
 					<tr>
 						<td colspan=2 style='font-size:11px;'><strong>Revisión y descarga OT</strong></td>
 					</tr>
 					<tr>
 						<td class='celda1' style='font-size:9px;text-align:center;'>Descarga / Fecha</td>
-						<td class='celda1' style='font-size:9px;text-align:center;'>Verificado / Fecha</td>
 					</tr>
 					<tr>
 						<td class='celda1' style='font-size:9px;text-align:center;height:60px;border-bottom:0px solid white;'>".ucwords($cabecera_TI[0]['NomDescarga'])."<br>".$cabecera_TI[0]['fecfirmaDescarga']."</td>
-						<td class='celda1' style='font-size:9px;text-align:center;height:60px;border-bottom:0px solid white;'>".ucwords($cabecera_TI[0]['NomVerifica'])."<br>".$cabecera_TI[0]['fecfirmaVerifica']."</td>
 					</tr>
 					<tr>
 						<td style='font-size:7px;text-align:center;border-left:1px solid black;border-right:1px solid black;border-top:0px solid white;'>Firma digital desde NETSUITE</td>
-						<td style='font-size:7px;text-align:center;border-right:1px solid black;border-top:0px solid white;'>Firma digital desde NETSUITE</td>
 					</tr>
 					<tr>
 						<td class='celda1' style='font-size:9px;text-align:center;'>Almacén</td>
-						<td class='celda1' style='font-size:9px;text-align:center;'>Aseguramiento de la Calidad</td>
 					</tr>
 				</table>
 			");
@@ -373,7 +408,7 @@ class indexController extends Controller
 						<td class='celda1' style='font-size:9px;text-align:center;'>Almacén</td>
 						<td style='width:2%;'></td>
 						<td class='celda1' style='font-size:9px;text-align:center;'>Almacén</td>
-						<td class='celda1' style='font-size:9px;text-align:center;'>Producción</td>
+						<td class='celda1' style='font-size:9px;text-align:center;'>Producción / ID</td>
 					</tr>
 				</table>
 			");
@@ -392,6 +427,7 @@ class indexController extends Controller
 			");
 			
 		}
+
 		
 		if(intval($input["dato"]['almacen'])==2)
 		{
@@ -410,7 +446,7 @@ class indexController extends Controller
 							<p style='font-size:12px;'>Laboratorios Biomont S.A.</p>
 						</td>
 						<td style='text-align:right;'>
-							<p style='font-size:16px;font-weight:bold;'>F-LOG.004.05</p>
+							<p style='font-size:16px;font-weight:bold;'>F-ID.031.01</p>
 						</td>
 					</tr>
 					<tr>
@@ -428,6 +464,20 @@ class indexController extends Controller
 			");
 			
 			$mpdf->Ln(3);
+			
+			if($cabecera_TI[0]['feccaducidad']===null or $cabecera_TI[0]['feccaducidad']==="" or $cabecera_TI[0]['feccaducidad']==="01/01/1970"){
+				$fecExp = "-";
+			}else{
+				$fecExp = substr($cabecera_TI[0]['feccaducidad'],3,2)."-".substr($cabecera_TI[0]['feccaducidad'],6,4);
+			}
+			
+			if($dato_cabecera_OP[0]['TipOT']!=="ENVASADO Y EMPACADO"){
+				$principio_activo = "<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>Principio activo:</td>
+									<td class='celda' style='font-size:11px;'><p style='background-color:#D6DBDF;color:#D6DBDF;'>Hola</p></td>";
+			}else{
+				$principio_activo = "<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>Principio activo:</td>
+									<td class='celda' style='font-size:11px;'>-</td>";
+			}
 
 			$mpdf->WriteHTML("
 				<table class='tabla' width='100%' style='border:#000000 1px solid;'>
@@ -453,13 +503,12 @@ class indexController extends Controller
 						<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>F. Fabricación:</td>
 						<td class='celda' style='font-size:11px;'>".substr($cabecera_TI[0]['FecFab'],3,2)."-".substr($cabecera_TI[0]['FecFab'],6,4)."</td>
 						<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>F. Expira:</td>
-						<td class='celda' style='font-size:11px;'>".substr($cabecera_TI[0]['feccaducidad'],3,2)."-".substr($cabecera_TI[0]['feccaducidad'],6,4)."</td>
+						<td class='celda' style='font-size:11px;'>".$fecExp."</td>
 					</tr>
 					<tr class='fila'>
 						<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>Línea:</td>
 						<td class='celda' style='font-size:11px;'>".$cabecera_TI[0]['linea']."</td>
-						<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>Principio activo:</td>
-						<td class='celda' style='font-size:11px;'><p style='background-color:#D6DBDF;color:#D6DBDF;'>Hola</p></td>
+						".$principio_activo."
 					</tr>
 				</table>
 			");
@@ -513,8 +562,8 @@ class indexController extends Controller
 					<tr>
 						<td class='celda1' style='font-size:9px;text-align:center;'>Emitido por</td>
 						<td class='celda1' style='font-size:9px;text-align:center;'>Revisado por</td>
-						<td class='celda1' style='font-size:9px;text-align:center;'>Ajustado por</td>
-						<td class='celda1' style='font-size:9px;text-align:center;'>Verificado por</td>
+						<td class='celda1' style='font-size:9px;text-align:center;'>Aprobado por</td>
+						<td class='celda1' style='font-size:9px;text-align:center;'>Recibido por</td>
 					</tr>
 					<tr>
 						<td class='celda1' style='font-size:9px;text-align:center;height:60px;border-bottom:0px solid white;'>".$dato_cabecera_OP[0]['EmiNomApe']."<br>".$dato_cabecera_OP[0]['firmaemitido']."</td>
@@ -529,10 +578,10 @@ class indexController extends Controller
 						<td style='font-size:7px;text-align:center;border-right:1px solid black;border-top:0px solid white;'>Firma digital desde NETSUITE</td>
 					</tr>
 					<tr>
-						<td class='celda1' style='font-size:9px;text-align:center;'>Logística</td>
+						<td class='celda1' style='font-size:9px;text-align:center;'>Investigación y Desarrollo</td>
+						<td class='celda1' style='font-size:9px;text-align:center;'>Investigación y Desarrollo</td>
+						<td class='celda1' style='font-size:9px;text-align:center;'>Logistica</td>
 						<td class='celda1' style='font-size:9px;text-align:center;'>Almacén</td>
-						<td class='celda1' style='font-size:9px;text-align:center;'>Producción</td>
-						<td class='celda1' style='font-size:9px;text-align:center;'>Aseguramiento</td>
 					</tr>
 				</table>
 			");
@@ -566,7 +615,7 @@ class indexController extends Controller
 							<p style='font-size:12px;'>Laboratorios Biomont S.A.</p>
 						</td>
 						<td style='text-align:right;'>
-							<p style='font-size:16px;font-weight:bold;'>F-LOG.004.05</p>
+							<p style='font-size:16px;font-weight:bold;'>F-LOG.004.06</p>
 						</td>
 					</tr>
 					<tr>
@@ -584,38 +633,65 @@ class indexController extends Controller
 			");
 			
 			$mpdf->Ln(3);
+			
+			if($cabecera_TI[0]['feccaducidad']===null or $cabecera_TI[0]['feccaducidad']==="" or $cabecera_TI[0]['feccaducidad']==="01/01/1970"){
+				$fecExp = "";
+			}else{
+				$fecExp = substr($cabecera_TI[0]['feccaducidad'],3,2)."-".substr($cabecera_TI[0]['feccaducidad'],6,4);
+			}
+			
+			if($dato_cabecera_OP[0]['TipOT']=="ENVASADO Y EMPACADO"){
+				$principio_activo = "<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>Principio activo:</td>
+									<td class='celda' style='font-size:11px;'>-</td>";
+				$fecha_exp = "<td class='celda' style='width:20%;text-align:right;font-size:11px;font-weight:bold;'>F. Expira:</td>
+							<td class='celda' style='width:32%;font-size:11px;'>".$fecExp."</td>";
+				
+				/*$header_firma = "<td class='celda1' style='font-size:9px;text-align:center;'>Ajustado por</td>";
+				$body1_firma = "<td class='celda1' style='font-size:9px;text-align:center;height:60px;border-bottom:0px solid white;'>".$dato_cabecera_OP[0]['AjuNomApe']."<br>".$dato_cabecera_OP[0]['firmaajustado']."</td>";
+				$body2_firma = "<td style='font-size:7px;text-align:center;border-right:1px solid black;border-top:0px solid white;'>Firma digital desde NETSUITE</td>";
+				$footer_firma = "<td class='celda1' style='font-size:9px;text-align:center;'>Aseguramiento</td>";*/
+				
+			}else{
+				$principio_activo = "<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>Principio activo:</td>
+									<td class='celda' style='font-size:11px;'><p style='background-color:#D6DBDF;color:#D6DBDF;'>Hola</p></td>";
+				$fecha_exp = "<td class='celda' style='width:20%;text-align:right;font-size:11px;font-weight:bold;'>F. Expira:</td>
+							<td class='celda' style='width:32%;font-size:11px;'>-</td>";
+				
+				/*$header_firma = "";
+				$body1_firma = "";
+				$body2_firma = "";
+				$footer_firma = "";*/
+			}
 
 			$mpdf->WriteHTML("
 				<table class='tabla' width='100%' style='border:#000000 1px solid;'>
 					<tr class='fila'>
-						<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>Código Producto:</td>
-						<td class='celda' style='font-size:11px;'>".$cabecera_TI[0]['codarticulo']."</td>
-						<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>Producto:</td>
-						<td class='celda' style='font-size:11px;'>".$cabecera_TI[0]['nomarticulo']."</td>
+						<td class='celda' style='width:16%;text-align:right;font-size:11px;font-weight:bold;'>Código Producto:</td>
+						<td class='celda' style='width:32%;font-size:11px;'>".$cabecera_TI[0]['codarticulo']."</td>
+						<td class='celda' style='width:20%;text-align:right;font-size:11px;font-weight:bold;'>Producto:</td>
+						<td class='celda' style='width:32%;font-size:11px;'>".$cabecera_TI[0]['nomarticulo']."</td>
 					</tr>
 					<tr class='fila'>
-						<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>OT:</td>
-						<td class='celda' style='font-size:11px;'>".$dato_cabecera_OP[0]['NroOpe']."</td>
-						<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>Cantidad a Producir:</td>
-						<td class='celda' style='font-size:11px;'>".$cabecera_TI[0]['canprod']." ".$cabecera_TI[0]['Unidad']."</td>
+						<td class='celda' style='width:16%;text-align:right;font-size:11px;font-weight:bold;'>OT:</td>
+						<td class='celda' style='width:32%;font-size:11px;'>".$dato_cabecera_OP[0]['NroOpe']."</td>
+						<td class='celda' style='width:20%;text-align:right;font-size:11px;font-weight:bold;'>Cantidad a Producir:</td>
+						<td class='celda' style='width:32%;font-size:11px;'>".$cabecera_TI[0]['canprod']." ".$cabecera_TI[0]['Unidad']."</td>
 					</tr>
 					<tr class='fila'>
-						<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>F. registro:</td>
-						<td class='celda' style='font-size:11px;'>".$dato_cabecera_OP[0]['FechaCreacion']."</td>
-						<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>Lote:</td>
-						<td class='celda' style='font-size:11px;'>".$cabecera_TI[0]['Lote']."</td>
+						<td class='celda' style='width:16%;text-align:right;font-size:11px;font-weight:bold;'>F. registro:</td>
+						<td class='celda' style='width:32%;font-size:11px;'>".$dato_cabecera_OP[0]['FechaCreacion']."</td>
+						<td class='celda' style='width:20%;text-align:right;font-size:11px;font-weight:bold;'>Lote:</td>
+						<td class='celda' style='width:32%;font-size:11px;'>".$cabecera_TI[0]['Lote']."</td>
 					</tr>
 					<tr class='fila'>
-						<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>F. Fabricación:</td>
-						<td class='celda' style='font-size:11px;'>".substr($dato_cabecera_OP[0]['FecFab'],3,2)."-".substr($dato_cabecera_OP[0]['FecFab'],6,4)."</td>
-						<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>F. Expira:</td>
-						<td class='celda' style='font-size:11px;'>".substr($cabecera_TI[0]['feccaducidad'],3,2)."-".substr($cabecera_TI[0]['feccaducidad'],6,4)."</td>
+						<td class='celda' style='width:16%;text-align:right;font-size:11px;font-weight:bold;'>F. Fabricación:</td>
+						<td class='celda' style='width:32%;font-size:11px;'>".substr($dato_cabecera_OP[0]['FecFab'],3,2)."-".substr($dato_cabecera_OP[0]['FecFab'],6,4)."</td>
+						".$fecha_exp."
 					</tr>
 					<tr class='fila'>
-						<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>Línea:</td>
-						<td class='celda' style='font-size:11px;'>".$cabecera_TI[0]['linea']."</td>
-						<td class='celda' style='text-align:right;font-size:11px;font-weight:bold;'>Principio activo:</td>
-						<td class='celda' style='font-size:11px;'><p style='background-color:#D6DBDF;color:#D6DBDF;'>Hola</p></td>
+						<td class='celda' style='width:16%;text-align:right;font-size:11px;font-weight:bold;'>Línea:</td>
+						<td class='celda' style='width:32%;font-size:11px;'>".$cabecera_TI[0]['linea']."</td>
+						".$principio_activo."
 					</tr>
 				</table>
 			");
@@ -626,7 +702,8 @@ class indexController extends Controller
 				<table class='tabla1' width='100%'>
 					<tr class='fila1'>
 						<td class='celda1' style='width:15%;font-size:10px;'><strong>Código</strong></td>
-						<td class='celda1' style='width:60%;font-size:10px;'><strong>Descripcion</strong></td>
+						<td class='celda1' style='width:45%;font-size:10px;'><strong>Descripcion</strong></td>
+						<td class='celda1' style='width:15%;font-size:10px;text-align:center;'><strong>Cant. Generada</strong></td>
 						<td class='celda1' style='width:15%;font-size:10px;text-align:center;'><strong>Cantidad</strong></td>
 						<td class='celda1' style='width:10%;font-size:10px;text-align:center;'><strong>UND</strong></td>
 					</tr>
@@ -639,12 +716,22 @@ class indexController extends Controller
 				$where2 .= "";
 			}else{
 				$where1 .= "";
-				$where2 .= " and (I.fullname LIKE 'M%' or I.fullname LIKE 'B%')";
+				$where2 .= " and (I.fullname LIKE 'M%' or I.fullname LIKE 'B%' or I.fullname LIKE 'P%')";
 			}
 			
 			$dato_detalle_OP = $objModel->getDetalleOrdenTrabajo(intval($cabecera_TI[0]['idOP']),$where1,$where2);
 			
-			foreach($dato_detalle_OP as $art1){
+			/*Inicio Datos cantidad Generada*/
+			$datos_mysql = $objModel->queryMysql(intval($cabecera_TI[0]['idOP']));
+			/*Fin Datos cantidad Generada*/
+			
+			if(count($datos_mysql)>0){
+				$res_dato_detalle_OP = $this->custom_array_merge($dato_detalle_OP, $datos_mysql);
+			}else{
+				$res_dato_detalle_OP = $dato_detalle_OP;
+			}
+			//Aqui
+			foreach($res_dato_detalle_OP as $art1){
 				
 				if($art1['principActivo']=='T'){
 					$principio_activo="background-color:#D6DBDF;color:#000000";
@@ -652,10 +739,13 @@ class indexController extends Controller
 					$principio_activo="";
 				}
 
+				//preg_replace('/[^%()\/&°.\\s\p{L}\p{N}]/u', '-',$art1['codarticulo'])
+
 				$mpdf->WriteHTML("
 					<tr class='fila1'>
-						<td class='celda1' style='width:15%;font-size:10px;".$principio_activo."'>".$art1['codigo']."</td>
-						<td class='celda1' style='width:60%;font-size:10px;".$principio_activo."'>".$art1['articulo']."</td>
+						<td class='celda1' style='width:15%;font-size:10px;".$principio_activo."'>".$art1['codarticulo']."</td>
+						<td class='celda1' style='width:45%;font-size:10px;".$principio_activo."'>".preg_replace('/[^%()\/&°.\\s\p{L}\p{N}]/u', '-',$art1['articulo'])."</td>
+						<td class='celda1' style='width:15%;font-size:10px;text-align:center;".$principio_activo."'>".number_format($art1['cantidad_mysql'], 3, '.', ',')."</td>
 						<td class='celda1' style='width:15%;font-size:10px;text-align:center;".$principio_activo."'>".number_format($art1['cantidad'], 3, '.', ',')."</td>
 						<td class='celda1' style='width:10%;font-size:10px;text-align:center;".$principio_activo."'>".$art1['und']."</td>
 					</tr>
@@ -669,6 +759,24 @@ class indexController extends Controller
 			$mpdf->Ln(3);
 			
 			date_default_timezone_set('America/Lima');
+			
+			if($dato_cabecera_OP[0]['TipOT']=="ENVASADO Y EMPACADO" || $dato_cabecera_OP[0]['TipOT']=="REACONDICIONADO"){
+				$ancho = "50%";
+				$header = "<td class='celda1' style='font-size:9px;text-align:center;'>Verificado por</td>";
+				$body1="<td class='celda1' style='font-size:9px;text-align:center;height:60px;border-bottom:0px solid white;'>".$dato_cabecera_OP[0]['VerNomApe']."<br>".$dato_cabecera_OP[0]['firmaverificado']."</td>";
+				$body2="<td style='font-size:7px;text-align:center;border-right:1px solid black;border-top:0px solid white;'>Firma digital desde NETSUITE</td>";
+				$footer="<td class='celda1' style='font-size:9px;text-align:center;'>Aseguramiento de la Calidad</td>";
+			}else{
+				$ancho = "80%";
+				$header = "<td class='celda1' style='font-size:9px;text-align:center;'>Ajustado por</td>
+							<td class='celda1' style='font-size:9px;text-align:center;'>Verificado por</td>";
+				$body1="<td class='celda1' style='font-size:9px;text-align:center;height:60px;border-bottom:0px solid white;'>".$dato_cabecera_OP[0]['RevNomApe']."<br>".$dato_cabecera_OP[0]['firmarevisado']."</td>
+							<td class='celda1' style='font-size:9px;text-align:center;height:60px;border-bottom:0px solid white;'>".$dato_cabecera_OP[0]['VerNomApe']."<br>".$dato_cabecera_OP[0]['firmaverificado']."</td>";
+				$body2="<td style='font-size:7px;text-align:center;border-right:1px solid black;border-top:0px solid white;'>Firma digital desde NETSUITE</td>
+							<td style='font-size:7px;text-align:center;border-right:1px solid black;border-top:0px solid white;'>Firma digital desde NETSUITE</td>";
+				$footer="<td class='celda1' style='font-size:9px;text-align:center;'>Almacén</td>
+							<td class='celda1' style='font-size:9px;text-align:center;'>Aseguramiento de la Calidad</td>";
+			}
 			
 			if(intval($dato_cabecera_OP[0]['NroOpe'])<585){
 				$mpdf->WriteHTML("
@@ -704,29 +812,25 @@ class indexController extends Controller
 				");
 			}else{
 				$mpdf->WriteHTML("
-					<table class='tabla2' width='80%'>
+					<table class='tabla2' width='".$ancho."'>
 						<tr>
 							<td colspan=2 style='font-size:11px;'><strong>Revisión y descarga de OT</strong></td>
 						</tr>
 						<tr>
 							<td class='celda1' style='font-size:9px;text-align:center;'>Emitido por</td>
-							<td class='celda1' style='font-size:9px;text-align:center;'>Revisado por</td>
-							<td class='celda1' style='font-size:9px;text-align:center;'>Ajustado por</td>
+							".$header."
 						</tr>
 						<tr>
 							<td class='celda1' style='font-size:9px;text-align:center;height:60px;border-bottom:0px solid white;'>".$dato_cabecera_OP[0]['EmiNomApe']."<br>".$dato_cabecera_OP[0]['firmaemitido']."</td>
-							<td class='celda1' style='font-size:9px;text-align:center;height:60px;border-bottom:0px solid white;'>".$dato_cabecera_OP[0]['RevNomApe']."<br>".$dato_cabecera_OP[0]['firmarevisado']."</td>
-							<td class='celda1' style='font-size:9px;text-align:center;height:60px;border-bottom:0px solid white;'>".$dato_cabecera_OP[0]['AjuNomApe']."<br>".$dato_cabecera_OP[0]['firmaajustado']."</td>
+							".$body1."
 						</tr>
 						<tr>
 							<td style='font-size:7px;text-align:center;border-left:1px solid black;border-right:1px solid black;border-top:0px solid white;'>Firma digital desde NETSUITE</td>
-							<td style='font-size:7px;text-align:center;border-right:1px solid black;border-top:0px solid white;'>Firma digital desde NETSUITE</td>
-							<td style='font-size:7px;text-align:center;border-right:1px solid black;border-top:0px solid white;'>Firma digital desde NETSUITE</td>
+							".$body2."
 						</tr>
 						<tr>
 							<td class='celda1' style='font-size:9px;text-align:center;'>Logística</td>
-							<td class='celda1' style='font-size:9px;text-align:center;'>Almacén</td>
-							<td class='celda1' style='font-size:9px;text-align:center;'>Producción</td>
+							".$footer."
 						</tr>
 					</table>
 				");
@@ -890,7 +994,7 @@ class indexController extends Controller
 		$input = json_decode(file_get_contents("php://input"), true);
 
 		if($input["dato"]['email']=='logistica'){
-			$emails = ["jpena@biomont.com.pe","cbonilla@biomont.com.pe","avilchez@biomont.com.pe","etacunan@biomont.com.pe"];
+			$emails = ["jpena@biomont.com.pe","lbasualdo@biomont.com.pe","mmancilla@biomont.com.pe","etacunan@biomont.com.pe"];
 		}else if($input["dato"]['email']=='almacen'){
 			$emails = ["jpena@biomont.com.pe","mramirez@biomont.com.pe","etacunan@biomont.com.pe","id@biomont.com.pe","mmancilla@biomont.com.pe"];
 		}else if($input["dato"]['email']=='todos'){
@@ -1443,7 +1547,7 @@ class indexController extends Controller
 						<p style='font-size:12px;'>Laboratorios Biomont S.A.</p>
 					</td>
 					<td style='text-align:right;'>
-						<p style='font-size:16px;font-weight:bold;'>F-LOG.004.05</p>
+						<p style='font-size:16px;font-weight:bold;'>F-ID.031.01</p>
 					</td>
 				</tr>
 				<tr>
@@ -1561,8 +1665,8 @@ class indexController extends Controller
 					<td style='font-size:7px;text-align:center;border-right:1px solid black;border-top:0px solid white;'>Firma digital desde NETSUITE</td>
 				</tr>
 				<tr>
-					<td class='celda1' style='font-size:9px;text-align:center;'>Asistente IDE</td>
-					<td class='celda1' style='font-size:9px;text-align:center;'>Asistente IDE</td>
+					<td class='celda1' style='font-size:9px;text-align:center;'>Investigación y Desarrollo</td>
+					<td class='celda1' style='font-size:9px;text-align:center;'>Investigación y Desarrollo</td>
 					<td class='celda1' style='font-size:9px;text-align:center;'>Logística</td>
 					<td class='celda1' style='font-size:9px;text-align:center;'>Almacén</td>
 				</tr>
@@ -3066,6 +3170,161 @@ class indexController extends Controller
 		
 		$this->getLibrary('mpdf/mpdf');
 
+		$mpdf = new mPDF('utf-8', 'TICKET', '', '', 2, 2, 2, 2, 1, 3);
+
+		$mpdf->SetTitle('IMPRESION DE ETIQUETA SALIDA MATERIA PRIMA');
+
+		$objModel = $this->loadModel("index");
+		$res = $objModel->getIdTrasladoOP_AJUSTE($traslado);
+		$dato = $objModel->getDatosEtiquetaSalidaTodo_AJUSTE_materiaprima($res[0]['idtraslado']);
+
+		$cont = 0;
+		foreach($dato as $dat){
+			$inventorynumber = explode("#",$dat['inventorynumber']);
+
+			$index = strpos($dat['itemid'], "0");
+			$cod_letra = substr($dat['itemid'],0,$index);
+
+			switch($cod_letra){
+				case 'MP':
+				case 'MMP':
+					$lote = $inventorynumber[0];
+					$v_potencia = $inventorynumber[1];
+					$num_analisis = $inventorynumber[2];
+					$peso = $inventorynumber[3];
+					break;
+				default:
+					$lote = $inventorynumber[0];
+					$v_potencia = $inventorynumber[1];
+					$num_analisis = $inventorynumber[2];
+					$peso = "";
+					break;
+			}
+
+			if($dat['expirationdate']==null || $dat['expirationdate']=="" || $dat['expirationdate']=="01/01/1970"){
+				$fecha_exp = "";
+			}else{
+				$fecha_exp = $dat['expirationdate'];
+			}
+
+			if($dat['fec_analisis']==null || $dat['fec_analisis']=="" || $dat['fec_analisis']=="01/01/1970"){
+				$fecha_ven = "";
+			}else{
+				$fecha_ven = $dat['fec_analisis'];
+			}
+
+			if($dat['fecha_analisis']==null || $dat['fecha_analisis']=="" || $dat['fecha_analisis']=="01/01/1970"){
+				$fecha_analisis = "";
+			}else{
+				$fecha_analisis = $dat['fecha_analisis'];
+			}
+
+			$mpdf->SetDefaultFont("Arial");
+
+			$mpdf->WriteHTML("<div style='position:absolute;font-size:7px;font-weight:bold;'>
+								LABORATORIOS BIOMONT S.A.
+							</div>
+							<div style='font-size:7px;font-weight:bold;text-align:right;'>
+								F-CC.001.04
+							</div>
+							<div align='center' style='font-size:42px;font-weight:bold;padding:0px;'>
+								APROBADO
+							</div>
+							<div align='right' style='font-size:8px;font-weight:bold;'>
+								MATERIA PRIMA &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTROL DE CALIDAD
+							</div>
+							");
+
+			$mpdf->Ln(1);
+
+			$mpdf->WriteHTML("
+				<table width='100%'>
+					<tr>
+						<td style='width:24%;font-size: 11px;font-weight:bold;padding:2px 2px 2px 2px;'>NOMBRE</td>
+						<td style='width:1%;font-size: 11px;font-weight:bold;padding:2px 2px 2px 2px;'>:</td>
+						<td style='width:75%;font-size: 11px;padding:2px 2px 2px 2px;' colspan=4>".$dat['description']."</td>
+					</tr>
+					<tr>
+						<td style='width:24%;font-size: 11px;font-weight:bold;padding:2px 2px 2px 2px;'>LOTE</td>
+						<td style='width:1%;font-size: 11px;font-weight:bold;padding:2px 2px 2px 2px;'>:</td>
+						<td style='width:75%;font-size: 11px;padding:2px 2px 2px 2px;' colspan=4>".$lote."</td>
+					</tr>
+					<tr>
+						<td style='width:24%;font-size: 11px;font-weight:bold;padding:2px 2px 2px 2px;'>CODIGO</td>
+						<td style='width:1%;font-size: 11px;font-weight:bold;padding:2px 2px 2px 2px;'>:</td>
+						<td style='width:22%;font-size: 11px;padding:2px 2px 2px 2px;'>".$dat['itemid']."</td>
+						<td style='width:32%;font-size: 11px;font-weight:bold;padding:2px 2px 2px 2px;'>NRO DOC.</td>
+						<td style='width:1%;font-size: 11px;font-weight:bold;padding:2px 2px 2px 2px;'>:</td>
+						<td style='width:22%;font-size: 11px;padding:2px 2px 2px 2px;'>".$dat['TranID']."</td>
+					</tr>
+					<tr>
+						<td style='width:24%;font-size: 11px;font-weight:bold;padding:2px 2px 2px 2px;'>N° ANALISIS</td>
+						<td style='width:1%;font-size: 11px;font-weight:bold;padding:2px 2px 2px 2px;'>:</td>
+						<td style='width:22%;font-size: 11px;padding:2px 2px 2px 2px;'>".$num_analisis."</td>
+						<td style='width:32%;font-size: 11px;font-weight:bold;padding:2px 2px 2px 2px;'>CANT. APROBADA</td>
+						<td style='width:1%;font-size: 11px;font-weight:bold;padding:2px 2px 2px 2px;'>:</td>
+						<td style='width:22%;font-size: 11px;padding:2px 2px 2px 2px;'>".$dat['quantity']." ".$dat['abbreviation']."</td>
+					</tr>
+					<tr>
+						<td style='width:24%;font-size: 11px;font-weight:bold;padding:2px 2px 2px 2px;'>FEC. ANALISIS</td>
+						<td style='width:1%;font-size: 11px;font-weight:bold;padding:2px 2px 2px 2px;'>:</td>
+						<td style='width:22%;font-size: 11px;padding:2px 2px 2px 2px;'>".$fecha_analisis."</td>
+						<td style='width:32%;font-size: 11px;font-weight:bold;padding:2px 2px 2px 2px;'>FEC. EXPIRA</td>
+						<td style='width:1%;font-size: 11px;font-weight:bold;padding:2px 2px 2px 2px;'>:</td>
+						<td style='width:22;font-size: 11px;padding:2px 2px 2px 2px;'>".$fecha_exp."</td>
+					</tr>
+					<tr>
+						<td style='width:24%;font-size: 11px;font-weight:bold;padding:2px 2px 2px 2px;'>POTENCIA T/C</td>
+						<td style='width:1%;font-size: 11px;font-weight:bold;padding:2px 2px 2px 2px;'>:</td>
+						<td style='width:22%;font-size: 11px;padding:2px 2px 2px 2px;'>".$v_potencia."</td>
+						<td style='width:32%;font-size: 11px;font-weight:bold;padding:2px 2px 2px 2px;'>PESO ESPECIFICO</td>
+						<td style='width:1%;font-size: 11px;font-weight:bold;padding:2px 2px 2px 2px;'>:</td>
+						<td style='width:22%;font-size: 11px;padding:2px 2px 2px 2px;'>".$peso."</td>
+					</tr>
+					<tr>
+						<td style='width:25%;font-size: 11px;font-weight:bold;padding:2px 2px 2px 2px;'>OBSERVACIONES</td>
+						<td style='width:1%;font-size: 11px;font-weight:bold;padding:2px 2px 2px 2px;'>:</td>
+						<td style='width:73%;font-size: 11px;padding:2px 2px 2px 2px;' colspan=4>".$dat['memoajus']."</td>
+					</tr>
+				</table>
+			");
+
+			$footer = "<table width='100%' nowrap>
+						   <tr>
+							 <td style='width:15%;font-size: 8px;'></td>
+							 <td align='center' style='width:25%;font-size: 8px;'><hr style='width:100%;color:black;' /></td>
+							 <td style='width:20%;font-size: 8px;'></td>
+							 <td align='center' style='width:25%;font-size: 8px;'><hr style='width:100%;color:black;' /></td>
+							 <td style='width:15%;font-size: 8px;'></td>
+						   </tr>
+						   <tr>
+							 <td style='width:15%;font-size: 8px;'></td>
+							 <td align='center' style='width:25%;font-size: 8px;'><strong>ANALISTA</strong></td>
+							 <td style='width:20%;font-size: 8px;'></td>
+							 <td align='center' style='width:25%;font-size: 8px;'><strong>JEFE DE CC</strong></td>
+							 <td style='width:15%;font-size: 8px;'></td>
+						   </tr>
+					 </table>";
+
+			$mpdf->SetHTMLFooter($footer);
+
+			$cont++;
+
+			if($cont < count($dato)){
+				$mpdf->AddPage();
+			}
+		}
+
+		$mpdf->Output();
+
+	}
+
+	/*public function imprimirEtiquetaSalidaTodo_AJUSTE_materiaprima($traslado){
+
+		header('Access-Control-Allow-Origin: *');
+
+		$this->getLibrary('mpdf/mpdf');
+
 		$mpdf = new mPDF('utf-8', 'TICKET', '', '', 2, 2, 2, 0, 1, 3);
 
 		$mpdf->SetTitle('IMPRESION DE ETIQUETA SALIDA MATERIA PRIMA');
@@ -3208,7 +3467,7 @@ class indexController extends Controller
 		
 		$mpdf->Output();
 		
-	}
+	}*/
 	
 	public function imprimirEtiquetaSalidaTodo_AJUSTE_materialempaqueenvase($traslado){
 		
@@ -3513,9 +3772,12 @@ class indexController extends Controller
 		]);
 	}*/
 	
+	
+	
+	
 	/* Funcion INNER JOIN en php*/
 	
-	function custom_array_merge($array1, $array2) {
+	/*function custom_array_merge($array1, $array2) {
 		$result = Array();
 		foreach ($array1 as $key_1 => $value_1) {
 			// if($value['name'])
@@ -3526,7 +3788,32 @@ class indexController extends Controller
 			}
 		}
 		return $result;
+	}*/
+	
+	function custom_array_merge($array1, $array2) {
+		$result = Array();
+		foreach ($array1 as $value_1) {
+			$matched = false; // Variable para rastrear si hubo coincidencias
+
+			foreach ($array2 as $value_2) {
+				if ($value_1['codarticulo'] == $value_2['componente_mysql']) {
+					$result[] = array_merge($value_1, $value_2);
+					$matched = true; // Marcamos que hubo una coincidencia
+				}
+			}
+
+			if (!$matched) {
+				// Si no hubo coincidencias, añadir el elemento de $array1 tal cual
+				$result[] = $value_1;
+			}
+		}
+
+		return $result;
 	}
+	
+	
+	
+	
 	
 	/*function custom_array_merge($a, $b) {
 		foreach ($a as $indice =>$value){
