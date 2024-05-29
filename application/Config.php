@@ -17,8 +17,11 @@ define('DEFAULT_LAYOUT', 'default');
 /*define('DB_USER', 'jpena@biomont.com.pe');
 define('DB_PASS', 'Pena140721');
 define('DB_NAME', 'NetSuite');*/
-define('DB_USER', 'fcastro@biomont.com.pe');
-define('DB_PASS', 'Biomont2022#');
+/*define('DB_USER', 'fcastro@biomont.com.pe');
+define('DB_PASS', 'Biomont2022#');*/
+define('DB_USER', 'gcrisolo@biomont.com.pe');
+define('DB_PASS', 'NetSuite01');
+
 define('DB_NAME', 'NetSuite');
 
 define("LAST_VERSION_SOURCE",strtotime("2021-03-04 09:24:11"));
